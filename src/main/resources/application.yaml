@@ -1,0 +1,43 @@
+spring:
+
+  jackson:
+    serialization:
+      write_dates_as_timestamps: false
+  datasource:
+    hikari:
+      connection-test-query: SELECT 1
+      minimum-idle: 1
+      maximum-pool-size: 5
+      pool-name: pool
+
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:mem
+    username: admin
+    password:
+    type: com.zaxxer.hikari.HikariDataSource
+#    initialize: true
+
+  jpa:
+#    properties:
+#      javax:
+#        persistence:
+#          schema-generation:
+#            create-source: metadata
+#            database:
+#              action: update
+#              action: drop-and-create
+#            database:
+#              action: none
+#            scripts:
+#              action: drop-and-create
+#              create-target: "tca-webapp-front-thymeleaf\\src\\main\\resources\\db\\migration\\V0.0.2__Schema.sql"
+#              drop-target: drop.sql
+
+    hibernate:
+#      ddl-auto: update
+#      ddl-auto: none
+      ddl-auto: create-drop
+
+logging:
+  level:
+    root: DEBUG
