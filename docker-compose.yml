@@ -1,0 +1,13 @@
+version: "3"
+services:
+  server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    ports:
+      - 8080:80
+  db:
+    image: oscarfonts/h2
+
+volumes:
+  h2Data:
