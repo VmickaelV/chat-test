@@ -6,7 +6,7 @@ LABEL maintainer="VIEGAS Michael"
 WORKDIR /workspace
 
 COPY gradle/ ./gradle
-COPY gradlew gradlew.bat settings.gradle resolveDependencies.gradle ./
+COPY gradlew gradlew.bat build.gradle settings.gradle resolveDependencies.gradle ./
 COPY server/build.gradle server/
 
 #RUN ls -laR
@@ -15,7 +15,7 @@ RUN ./gradlew resolveDependencies
 
 COPY ./ ./
 
-RUN ./gradlew :application-rest:build
+RUN ./gradlew :server:build
 
 FROM openjdk:8u162-jre-slim-stretch
 

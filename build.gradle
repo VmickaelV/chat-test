@@ -1,0 +1,3 @@
+allprojects {
+    apply from: rootProject.file("resolveDependencies.gradle")
+}
