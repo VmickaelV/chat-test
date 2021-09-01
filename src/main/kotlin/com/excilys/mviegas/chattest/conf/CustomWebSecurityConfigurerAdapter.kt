@@ -12,8 +12,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.web.servlet.config.annotation.CorsRegistry
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+
 
 @Configuration
 @EnableWebSecurity
@@ -29,10 +31,20 @@ class CustomWebSecurityConfigurerAdapter(
                 .passwordEncoder(passwordEncoder)
     }
 
+    @Bean
+    fun corsConfigurer(): WebMvcConfigurer? {
+        return object : WebMvcConfigurer {
+            override fun addCorsMappings(registry: CorsRegistry) {
+                registry.addMapping("/**").allowedMethods("*")
+            }
+        }
+    }
+
+
     override fun configure(http: HttpSecurity) {
         http.authorizeRequests()
                 .antMatchers("/login/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/login", "/signin").permitAll()
+                .antMatchers("/login", "/signin").permitAll()
                 .antMatchers("/signin/**").permitAll()
                 .antMatchers("/swagger-ui.html").permitAll()
                 .antMatchers("/swagger-resources/**").permitAll()
@@ -43,7 +55,7 @@ class CustomWebSecurityConfigurerAdapter(
                 .httpBasic()
                 .authenticationEntryPoint(authenticationEntryPoint)
 
-        http.csrf().disable()
+        http.csrf().disable().cors()
 //        http.addFilterAfter(CustomFilter(),
 //                BasicAuthenticationFilter::class.java)
     }
@@ -56,9 +68,8 @@ class CustomWebSecurityConfigurerAdapter(
                 .ignoring()
                 .antMatchers(HttpMethod.GET, "/", "/*.html", "/favicon.ico", "/**/*.html", "/**/*.css", "/**/*.js", "/**/*.png", "/**/*.gif")
                 .antMatchers("/swagger-ui**", "/v3/api-docs/**")
-                .and()
-                .ignoring()
                 .antMatchers("/h2-console/**/**")
+                .antMatchers("/signin", "/login")
     }
 
     @Bean
